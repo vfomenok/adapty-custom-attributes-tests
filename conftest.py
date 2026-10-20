@@ -9,6 +9,8 @@ import pytest
 
 from adapty_client import AdaptyClient
 
+pytest_plugins = ["report_hooks"]
+
 API_KEY_ENV = "ADAPTY_SECRET_API_KEY"
 
 

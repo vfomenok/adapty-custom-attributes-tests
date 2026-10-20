@@ -58,6 +58,21 @@ A run takes about a minute. Expected result:
 * `xfailed` — a **known API bug** (see [Findings](#findings-bugs-and-doc-gaps)); this is not a test failure.
 * `failed` / `XPASS(strict)` — behaviour changed: either a regression or a known bug was fixed.
 
+### Test report
+
+Every run writes an HTML report to **`reports/report.html`**. Open it in a browser:
+
+```bash
+open reports/report.html          # macOS
+xdg-open reports/report.html      # Linux
+start reports\report.html         # Windows
+```
+
+The report shows a summary, the environment (endpoint, Python, packages), and a table with a
+human-readable name, group and known-issue note for every check. Rows can be filtered by result
+and expanded to see request details and errors. The file is self-contained and can be
+sent to anyone as is; it does not contain the API key.
+
 ### Useful commands
 
 | Command | What it does |
@@ -82,7 +97,8 @@ manual runs ("Run pipeline"). To use it, import or mirror this repository into G
 1. **Settings → CI/CD → Variables**: add `ADAPTY_SECRET_API_KEY` with the *Masked* and *Protected* flags.
 2. Optional: **Build → Pipeline schedules**, e.g. nightly, to catch API regressions without code changes.
 
-Results appear in the pipeline's **Tests** tab and in merge requests (JUnit report).
+Results appear in the pipeline's **Tests** tab and in merge requests (JUnit report). The HTML
+report is attached to every job as the **HTML test report** artifact.
 
 ## Project structure
 
@@ -92,7 +108,8 @@ Results appear in the pipeline's **Tests** tab and in merge requests (JUnit repo
 │   └── helpers.py                  # assertions and payload builders
 ├── conftest.py                     # fixtures: API client, fresh profile per test
 ├── adapty_client.py                # thin wrapper around the Adapty API
-├── pytest.ini                      # pytest settings
+├── report_hooks.py                 # makes the HTML report readable
+├── pytest.ini                      # pytest settings (HTML report is enabled here)
 ├── requirements.txt
 └── .gitlab-ci.yml                  # GitLab CI pipeline
 ```
